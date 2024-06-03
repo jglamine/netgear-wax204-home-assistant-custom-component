@@ -1,4 +1,4 @@
-pytest==8.2.0
+pytest==8.2.1
 # Check https://github.com/MatthewFlamm/pytest-homeassistant-custom-component/commits/master/ha_version
 # to find the version of pytest-homeassistant-custom-component which corresponds to the current homeassistant version.
 pytest-homeassistant-custom-component==0.13.128
