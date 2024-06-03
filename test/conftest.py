@@ -1,0 +1,29 @@
+import pytest
+import pytest_socket
+import pytest_homeassistant_custom_component.plugins as ha_plugin
+
+original_ha_pytest_runtest_setup = ha_plugin.pytest_runtest_setup
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_configure() -> None:
+    """Disable pytest_socket and freezegun from home assistant plugin.
+
+    The default home assistant fixtures disable access to non-localhost sockets.
+    They also mock all datetimes, breaking datetime.now().
+
+    Monkey patch to skip pytest_socket and freezegun setup.
+    """
+    def noop(): return None
+    def disable_socket_noop(allow_unix_socket=False): return None
+
+    def disable_socket_allow_hosts(
+        allowed=None, allow_unix_socket=False): return None
+
+    # Monkey patch to disable freezegun datetime mocking in home assistant fixtures.
+    ha_plugin.pytest_runtest_setup = noop
+
+    # Monkey patch to disable pytest_socket
+    pytest_socket.pytest_runtest_setup = noop
+    pytest_socket.disable_socket = disable_socket_noop
+    pytest_socket.socket_allow_hosts = disable_socket_allow_hosts

@@ -5,4 +5,10 @@ default_config:
 logger:
   default: info
   logs:
-    custom_components.integration_blueprint: debug
+    custom_components.netgear_wax204: debug
+    debugpy: debug
+
+# debugpy:
+#   wait: false
+#   start: true
+#   port: 5679

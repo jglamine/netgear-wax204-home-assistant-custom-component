@@ -1,0 +1,12 @@
+{
+  "domain": "netgear_wax204",
+  "name": "Netgear WAX204",
+  "codeowners": [
+    "@jglamine"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/jglamine/netgear-wax204-home-assistant-custom-component",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/jglamine/netgear-wax204-home-assistant-custom-component/issues",
+  "version": "1.0.0"
+}
