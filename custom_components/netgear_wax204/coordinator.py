@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -42,7 +41,7 @@ class Wax204DataUpdateCoordinator(DataUpdateCoordinator):
         self.api = api
         self.password = password
         self.is_paused: bool = False
-        self.resume_after: Optional[datetime] = None
+        self.resume_after: datetime | None = None
         self.refresh_cookie_after: datetime = datetime.now() + cookie_refresh_interval
         self.cookie_refresh_interval = cookie_refresh_interval
         self.pause_interval = timedelta(minutes=10)
@@ -75,7 +74,7 @@ class Wax204DataUpdateCoordinator(DataUpdateCoordinator):
             raise ConfigEntryAuthFailed(f"Login failed: {e}") from e
         except WAX204ApiError as e:
             raise UpdateFailed(
-                f"Error communicating with API when refreshing login cookie") from e
+                "Error communicating with API when refreshing login cookie") from e
 
     async def _async_update_data(self):
         """Update data via API."""
@@ -98,7 +97,7 @@ class Wax204DataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.api.get_connected_devices()
             LOGGER.debug("Found %s connected devices", len(data))
             return Wax204DataModel(devices=data)
-        except WAX204ApiExpireCookieError as e:
+        except WAX204ApiExpireCookieError:
             # Login expired. Most likely because another user is logged in.
             # The router can only support one user at a time.
             # We don't want to lock other users out of the router's web UI, so pause updates
