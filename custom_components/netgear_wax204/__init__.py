@@ -13,7 +13,7 @@ from .const import DOMAIN
 from .coordinator import Wax204DataUpdateCoordinator
 
 PLATFORMS: list[Platform] = [Platform.DEVICE_TRACKER]
-SCAN_INTERVAL = timedelta(seconds=15)
+SCAN_INTERVAL = timedelta(seconds=5)
 COOKIE_REFRESH_INTERVAL = timedelta(hours=2)
 
 _LOGGER = logging.getLogger(__name__)
