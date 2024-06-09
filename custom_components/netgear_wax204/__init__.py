@@ -15,6 +15,7 @@ from .coordinator import Wax204DataUpdateCoordinator
 PLATFORMS: list[Platform] = [Platform.DEVICE_TRACKER]
 SCAN_INTERVAL = timedelta(seconds=5)
 COOKIE_REFRESH_INTERVAL = timedelta(hours=2)
+CONSIDER_HOME = timedelta(seconds=60)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,6 +58,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         api=api,
         update_interval=SCAN_INTERVAL,
         cookie_refresh_interval=COOKIE_REFRESH_INTERVAL,
+        consider_home=CONSIDER_HOME,
         password=password,
     )
 
