@@ -8,7 +8,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from custom_components.netgear_wax204.api import ConnectedDevice
 
 from .const import DOMAIN
-from .coordinator import Wax204DataModel, Wax204DataUpdateCoordinator
+from .coordinator import Wax204DataUpdateCoordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
@@ -29,7 +29,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
         async_add_entities(new_entities)
 
-    entry.async_on_unload(coordinator.async_add_listener(on_coordinator_update))
+    entry.async_on_unload(
+        coordinator.async_add_listener(on_coordinator_update))
 
 
 class NetgearWax204DeviceEntity(CoordinatorEntity, ScannerEntity):
@@ -37,6 +38,7 @@ class NetgearWax204DeviceEntity(CoordinatorEntity, ScannerEntity):
     def __init__(self, coordinator: Wax204DataUpdateCoordinator, device: ConnectedDevice) -> None:
         super().__init__(coordinator)
         self._device = device
+        self._coordinator = coordinator
 
     @property
     def name(self) -> str:
@@ -62,9 +64,6 @@ class NetgearWax204DeviceEntity(CoordinatorEntity, ScannerEntity):
     def source_type(self) -> SourceType:
         return SourceType.ROUTER
 
-    def _data(self) -> Wax204DataModel:
-        return self.coordinator.data
-
     @property
     def is_connected(self) -> bool:
-        return self._data().devices.get(self._device.mac) is not None
+        return self._coordinator.is_active(self._device.mac)
