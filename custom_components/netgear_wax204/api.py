@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import logging
+import datetime
 
 import aiohttp
 
@@ -93,8 +94,9 @@ class WAX204Api:
             raise WAX204ApiError("Error signing in") from e
 
     async def get_connected_devices(self):
+        timestamp_ms = int(datetime.datetime.now().timestamp() * 1000)
         try:
-            async with self._session.get(f"{self.host}/refresh_dev.htm") as response:
+            async with self._session.get(f"{self.host}/refresh_dev.htm", params={"ts": timestamp_ms}) as response:
                 response.raise_for_status()
                 if await self._is_signed_out(response):
                     raise WAX204ApiExpireCookieError(
