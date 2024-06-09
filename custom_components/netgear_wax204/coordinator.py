@@ -54,6 +54,7 @@ class Wax204DataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _refresh_login_cookie(self):
         """Sign out other users and sign in again."""
+        LOGGER.info("Refreshing login cookie")
         try:
             LOGGER.info("Signing out other users")
             await self.api.sign_out_other_users()
