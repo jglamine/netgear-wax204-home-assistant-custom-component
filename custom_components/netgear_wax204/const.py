@@ -5,4 +5,4 @@ LOGGER: Logger = getLogger(__package__)
 
 NAME = "Netgear WAX204"
 DOMAIN = "netgear_wax204"
-VERSION = "1.3.0"
+VERSION = "1.4.0"

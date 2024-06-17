@@ -3,6 +3,7 @@ import logging
 import datetime
 
 import aiohttp
+import orjson
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
@@ -92,6 +93,8 @@ class WAX204Api:
                         "Login failed, server didn't return a jwt_local cookie")
         except aiohttp.ClientError as e:
             raise WAX204ApiError("Error signing in") from e
+        except orjson.JSONDecodeError as e:
+            raise WAX204ApiError("Invalid json when signing in") from e
 
     async def get_connected_devices(self):
         timestamp_ms = int(datetime.datetime.now().timestamp() * 1000)
@@ -116,6 +119,8 @@ class WAX204Api:
                 return devices
         except aiohttp.ClientError as e:
             raise WAX204ApiError("Error getting connected devices") from e
+        except orjson.JSONDecodeError as e:
+            raise WAX204ApiError("Invalid json when getting connected devices") from e
 
     async def _is_signed_out(self, response: aiohttp.ClientResponse) -> bool:
         if response.status != 200:
